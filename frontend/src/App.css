@@ -1,0 +1,253 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500&display=swap");
+
+:root {
+  --bg-1: #101820;
+  --bg-2: #1a2b3c;
+  --surface: rgba(12, 21, 33, 0.8);
+  --surface-border: rgba(153, 186, 220, 0.25);
+  --text-main: #ecf4ff;
+  --text-muted: #a9c2dd;
+  --accent: #ffb347;
+  --danger: #ff7b7b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at 10% 10%, #2e4f68 0%, transparent 35%),
+    radial-gradient(circle at 90% 15%, #354b2c 0%, transparent 30%),
+    linear-gradient(145deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  min-height: 100vh;
+}
+
+#root {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2.5rem 1.2rem 3rem;
+}
+
+.app-shell {
+  backdrop-filter: blur(4px);
+}
+
+.hero {
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-size: 0.82rem;
+}
+
+h1 {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+}
+
+.tab-row {
+  display: flex;
+  gap: 0.7rem;
+  margin: 1.2rem 0 1.4rem;
+  flex-wrap: wrap;
+}
+
+.tab-button {
+  border: 1px solid var(--surface-border);
+  background: rgba(9, 18, 30, 0.8);
+  color: var(--text-main);
+  padding: 0.55rem 0.85rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  border-color: rgba(255, 179, 71, 0.8);
+  background: rgba(255, 179, 71, 0.18);
+  color: #ffe2b8;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.9rem;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.player-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 14px;
+  padding: 0.95rem;
+  box-shadow: 0 12px 26px rgba(3, 7, 13, 0.28);
+}
+
+.player-card h2 {
+  margin: 0 0 0.7rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.06rem;
+}
+
+.position-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.position-chip {
+  border: 1px solid rgba(255, 179, 71, 0.5);
+  color: #ffe2b8;
+  background: rgba(255, 179, 71, 0.14);
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.76rem;
+  font-weight: 500;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.summary-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 14px;
+  padding: 0.95rem;
+  box-shadow: 0 12px 26px rgba(3, 7, 13, 0.28);
+}
+
+.summary-label {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.summary-card h3 {
+  margin: 0.5rem 0 0.2rem;
+}
+
+.summary-number {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffe2b8;
+}
+
+.value-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.value-row {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 0.7rem 0.8rem;
+}
+
+.value-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.value-row-top h4 {
+  margin: 0;
+}
+
+.value-score {
+  font-weight: 700;
+  color: #ffe2b8;
+}
+
+.value-bar-track {
+  width: 100%;
+  height: 9px;
+  background: rgba(120, 150, 180, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.value-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd34f, #ff9f50);
+  border-radius: 999px;
+}
+
+.trade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.9rem;
+}
+
+.trade-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 14px;
+  padding: 0.95rem;
+  box-shadow: 0 12px 26px rgba(3, 7, 13, 0.28);
+}
+
+.trade-swap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0 0 0.6rem;
+}
+
+.drop-player {
+  color: #ff9fa6;
+}
+
+.add-player {
+  color: #9dffcc;
+}
+
+.trade-metric {
+  margin: 0.2rem 0;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  #root {
+    padding: 1.2rem 0.9rem 2rem;
+  }
+
+  .tab-button {
+    width: 100%;
+  }
+}
+
+.empty-state {
+  color: var(--text-muted);
+}
+
+.error {
+  color: var(--danger);
+}
