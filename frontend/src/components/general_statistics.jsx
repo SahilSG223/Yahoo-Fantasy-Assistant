@@ -1,30 +1,31 @@
 import { useEffect, useMemo, useState } from 'react'
 
-export default function GeneralStatistics() {
+export default function GeneralStatistics({ teamNumber }) {
   const [payload, setPayload] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
 
   useEffect(() => {
+    if (!teamNumber) {
+      return
+    }
+
     const load = async () => {
       try {
         setLoading(true)
-        setError('')
-        const response = await fetch('http://localhost:5000/api/team/value-stats')
+        const query = `team_number=${encodeURIComponent(teamNumber)}`
+        const response = await fetch(`http://localhost:5000/api/team/value-stats?${query}`)
         const data = await response.json()
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to load value stats')
+        if (response.ok) {
+          setPayload(data)
         }
-        setPayload(data)
-      } catch (err) {
-        setError(err.message || 'Failed to load value stats')
+      } catch {
       } finally {
         setLoading(false)
       }
     }
 
     load()
-  }, [])
+  }, [teamNumber])
 
   const maxValue = useMemo(() => {
     if (!payload?.players?.length) {
@@ -35,10 +36,6 @@ export default function GeneralStatistics() {
 
   if (loading) {
     return <p>Loading value stats...</p>
-  }
-
-  if (error) {
-    return <p className="error">{error}</p>
   }
 
   if (!payload?.players?.length) {

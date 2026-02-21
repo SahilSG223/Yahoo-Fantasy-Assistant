@@ -2,36 +2,98 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import DisplayTeam from './components/display_team'
 import GeneralStatistics from './components/general_statistics'
+import SelectTeam from './components/select_team'
 import TradeIdeas from './components/trade_ideas'
 
 function App() {
+  const [setupDone, setSetupDone] = useState(false)
+  const [teamNumber, setTeamNumber] = useState('')
+  const [teams, setTeams] = useState([])
+  const [setupLoading, setSetupLoading] = useState(false)
+
   const [tab, setTab] = useState('team')
   const [players, setPlayers] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
 
   useEffect(() => {
     document.title = 'Fantasy Assistant'
+  }, [])
 
+  const contextQuery = `team_number=${encodeURIComponent(teamNumber)}`
+
+  const fetchTeams = async () => {
+    try {
+      setSetupLoading(true)
+      const response = await fetch('http://localhost:5000/api/league/teams')
+      const data = await response.json()
+      if (response.ok) {
+        const nextTeams = data.teams || []
+        setTeams(nextTeams)
+        if (nextTeams.length > 0) {
+          setTeamNumber(nextTeams[0].team_number || '')
+        }
+      }
+    } catch {
+      setTeams([])
+    } finally {
+      setSetupLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!setupDone) {
+      fetchTeams()
+    }
+  }, [setupDone])
+
+  const startWithSelection = async () => {
+    if (!teamNumber) {
+      return
+    }
     const fetchTeam = async () => {
       try {
         setLoading(true)
-        setError('')
-        const response = await fetch('http://localhost:5000/api/team')
+        const response = await fetch(`http://localhost:5000/api/team?${contextQuery}`)
         const data = await response.json()
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to load team')
+        if (response.ok) {
+          setPlayers(data.team || [])
+          setSetupDone(true)
         }
-        setPlayers(data.team || [])
-      } catch (err) {
-        setError(err.message || 'Failed to load team')
+      } catch {
       } finally {
         setLoading(false)
       }
     }
 
     fetchTeam()
-  }, [])
+  }
+
+  if (!setupDone) {
+    return (
+      <main className="app-shell">
+        <header className="hero">
+          <p className="eyebrow">2025-26 Season</p>
+          <h1>Fantasy Assistant</h1>
+        </header>
+
+        <section className="setup-card">
+          <h2>Select Team</h2>
+          <p className="setup-copy">Select your team from the list below.</p>
+
+          <button className="setup-button" type="button" onClick={fetchTeams} disabled={setupLoading}>
+            {setupLoading ? 'Loading Teams...' : 'Load Team Options'}
+          </button>
+
+          <SelectTeam
+            teams={teams}
+            teamNumber={teamNumber}
+            onTeamChange={setTeamNumber}
+            onContinue={startWithSelection}
+          />
+        </section>
+      </main>
+    )
+  }
 
   return (
     <main className="app-shell">
@@ -60,15 +122,14 @@ function App() {
           onClick={() => setTab('trades')}
           type="button"
         >
-          Trade Ideas
+          Trade Analysis 
         </button>
       </div>
 
       {tab === 'team' && loading && <p>Loading team...</p>}
-      {tab === 'team' && error && <p className="error">{error}</p>}
-      {tab === 'team' && !loading && !error && <DisplayTeam players={players} />}
-      {tab === 'stats' && <GeneralStatistics />}
-      {tab === 'trades' && <TradeIdeas />}
+      {tab === 'team' && !loading && <DisplayTeam players={players} />}
+      {tab === 'stats' && <GeneralStatistics teamNumber={teamNumber} />}
+      {tab === 'trades' && <TradeIdeas teamNumber={teamNumber} />}
     </main>
   )
 }
